@@ -29,7 +29,7 @@ export default {
   },
   computed:{
     isActive(){
-      return this.$route.path.indexOf(this.path)!=-1;
+      return this.$route.path.indexOf(this.path)!==-1;
     },
     ActiveStyle(){
       return this.isActive ? {color:this.ActiveColor}:{};
@@ -37,7 +37,7 @@ export default {
   },
   methods:{
     itemClick(){
-      this.$router.replace(this.path).catch(err => err);
+      this.$router.replace(this.path);
     }
   }
 }
