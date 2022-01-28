@@ -1,12 +1,12 @@
 <template>
 <div class="goods">
   <!--注意一定要绑定啊！！-->
-  <GoodsListitem :key="arrayKeys[index]" v-for="(item,index) in goods" :goods-item="item">{{arrayKeys[index]}}</GoodsListitem>
+  <GoodsListitem :key="arrayKeys[index]" v-for="(item,index) in goods" :goods-item="item"></GoodsListitem>
 </div>
 </template>
 
 <script>
-import GoodsListitem from "@/components/content/goods/GoodsListitem";
+import GoodsListitem from "@/components/goods/GoodsListitem";
 import shortId from 'shortid'
 export default {
   name: "GoodsList",
@@ -19,8 +19,8 @@ export default {
       arrayKeys:[]
     }
   },
-  //不知道为什么，没法生效。。好像和生命周期有关系
-  mounted(){
+  //和生命周期有关系！
+  beforeUpdate(){
     //根据要进行列表渲染的数组元素数量使用shortid.generate()创建对应的数组元素
     this.arrayKeys=this.goods.map(value =>  shortId.generate());
   }

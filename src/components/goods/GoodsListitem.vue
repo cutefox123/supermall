@@ -2,7 +2,7 @@
   <div class="goods-item">
     <img :src="goodsItem.show.img" alt="">
     <div class="goods-info">
-      <slot></slot>
+<!--      <slot></slot> -->
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
       <span class="collect">{{goodsItem.cfav}}</span>

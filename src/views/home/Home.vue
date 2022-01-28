@@ -24,15 +24,15 @@
 </template>
 
 <script>
-import NavBar from "@/components/common/navbar/NavBar";
+import NavBar from "@/components/navbar/NavBar";
 import HomeSwiper from "@/views/home/childComps/HomeSwiper";
 import RecommendView from "@/views/home/childComps/RecommendView";
 import FeatureView from "@/views/home/childComps/FeatureView";
-import TabControl from "@/components/content/tabControl/TabControl";
-import GoodsList from "@/components/content/goods/GoodsList";
+import TabControl from "@/components/tabControl/TabControl";
+import GoodsList from "@/components/goods/GoodsList";
 import {getHomeMultidata,getHomeGoods} from "@/network/home";
-import Scroll from "@/components/common/scroll/Scroll";
-import BackTop from "@/components/content/backTop/BackTop";
+import Scroll from "@/components/scroll/Scroll";
+import BackTop from "@/components/backTop/BackTop";
 export default {
   name: "Home",
   components:{
@@ -55,10 +55,21 @@ export default {
         'sell':{page:0,list:[]}
       },
       currentType:'pop',
-      isShowBackTop:false
+      isShowBackTop:false,
+      arrartest:[0,1,2,3,4,5,6,7,8,9,10]
     }
   },
   methods:{
+    //防抖函数的封装,返回值是一个函数
+    debounce(func,delay){
+      let timer = null;
+      return function (...args){
+        if(timer) clearTimeout(timer);
+        timer = setTimeout(()=>{
+          func.apply(this,args);
+        },delay);
+      }
+    },
     getHomeMultidata(){
       getHomeMultidata().then((res)=>{
         //注意，箭头函数里的this和一般函数不一样
