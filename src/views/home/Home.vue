@@ -1,26 +1,35 @@
 <template>
-<div id="home">
-  <nav-bar class="home-nav">
-    <div slot="center">购物街</div>
-  </nav-bar>
-  <scroll
-    @scroll="contentScroll"
-    ref="scroll"
-    class="content"
-    :probe-type="3"
-    :pull-up-load="true"
-    @pullingUp="loadMore"
-  >
-    <!--注意这里必须要加：不然传的是字符串而不是数字-->
-  <home-swiper :banners="banners"></home-swiper>
-  <recommend-view :recommends="recommends"></recommend-view>
-  <FeatureView></FeatureView>
-  <tab-control class="tab-control" :titles="['流行','新款','精选']" @TabClick="TabClick"></tab-control>
-  <goods-list :goods="goods[currentType].list"></goods-list>
-  </scroll>
-  <!--在我们需要监听一个组件的原生事件时，必须给对应的事件加上.native修饰符-->
-  <back-top @click.native="backTopClick" v-show="isShowBackTop"></back-top>
-</div>
+  <div id="home">
+    <nav-bar class="home-nav">
+      <div slot="center">购物街</div>
+    </nav-bar>
+      <tab-control ref="fakeTab"
+                   v-show="isShow"
+                   class="tab-control"
+                   :titles="['流行','新款','精选']"
+                   @TabClick="TabClick"></tab-control>
+    <scroll
+      @scroll="contentScroll"
+      ref="scroll"
+      class="content"
+      :probe-type="3"
+      :pull-up-load="true"
+      @pullingUp="loadMore"
+    >
+      <!--注意这里必须要加：不然传的是字符串而不是数字-->
+      <home-swiper @SwiperImgLoad="SwiperImgLoad" :banners="banners"></home-swiper>
+      <recommend-view :recommends="recommends"></recommend-view>
+      <FeatureView></FeatureView>
+      <tab-control  v-show="!isShow"
+                    ref="realTab"
+                    class="tab-control"
+                    :titles="['流行','新款','精选']"
+                    @TabClick="TabClick"></tab-control>
+      <goods-list :goods="goods[currentType].list"></goods-list>
+    </scroll>
+    <!--在我们需要监听一个组件的原生事件时，必须给对应的事件加上.native修饰符-->
+    <back-top @click.native="backTopClick" v-show="isShowBackTop"></back-top>
+  </div>
 </template>
 
 <script>
@@ -30,12 +39,13 @@ import RecommendView from "@/views/home/childComps/RecommendView";
 import FeatureView from "@/views/home/childComps/FeatureView";
 import TabControl from "@/components/tabControl/TabControl";
 import GoodsList from "@/components/goods/GoodsList";
-import {getHomeMultidata,getHomeGoods} from "@/network/home";
+import {getHomeMultidata, getHomeGoods} from "@/network/home";
 import Scroll from "@/components/scroll/Scroll";
 import BackTop from "@/components/backTop/BackTop";
+
 export default {
   name: "Home",
-  components:{
+  components: {
     Scroll,
     FeatureView,
     HomeSwiper,
@@ -45,68 +55,79 @@ export default {
     GoodsList,
     BackTop
   },
-  data(){
+  data() {
     return {
-      banners:[],
-      recommends:[],
-      goods:{
-        'pop':{page:0,list:[]},
-        'new':{page:0,list:[]},
-        'sell':{page:0,list:[]}
+      banners: [],
+      recommends: [],
+      goods: {
+        'pop': {page: 0, list: []},
+        'new': {page: 0, list: []},
+        'sell': {page: 0, list: []}
       },
-      currentType:'pop',
-      isShowBackTop:false,
-      arrartest:[0,1,2,3,4,5,6,7,8,9,10]
+      currentType: 'pop',
+      isShowBackTop: false,
+      isShow: false,
+      mTop:0,
     }
   },
-  methods:{
+  methods: {
+    SwiperImgLoad(){
+      this.mTop = this.$refs.realTab.$el.offsetTop - 42;
+    },
     //防抖函数的封装,返回值是一个函数
-    debounce(func,delay){
+    debounce(func, delay) {
       let timer = null;
-      return function (...args){
-        if(timer) clearTimeout(timer);
-        timer = setTimeout(()=>{
-          func.apply(this,args);
-        },delay);
+      return function (...args) {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          func.apply(this, args);
+        }, delay);
       }
     },
-    getHomeMultidata(){
-      getHomeMultidata().then((res)=>{
+    getHomeMultidata() {
+      getHomeMultidata().then((res) => {
         //注意，箭头函数里的this和一般函数不一样
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
       })
     },
-    getHomeGoods(type){
+    getHomeGoods(type) {
       //这里只是个局部变量用来传参，去请求分页数据
       const page = this.goods[type].page + 1;
-      getHomeGoods(type,page).then((res)=>{
+      getHomeGoods(type, page).then((res) => {
         //...是ES6语法，是对数组的解构,然后再结合push自带的可变参数功能
         this.goods[type].list.push(...res.data.list);
         //这里才是真正增加页码
         this.goods[type].page += 1;
       })
     },
-    TabClick(index){
+    TabClick(index) {
       switch (index) {
         case 0:
           this.currentType = 'pop';
+          //点击tab回到顶部
+          this.$refs.scroll.scrollWhere(0, -this.mTop,0);
           break;
         case 1:
           this.currentType = 'new';
+          this.$refs.scroll.scrollWhere(0, -this.mTop,0);
           break;
         case 2:
           this.currentType = 'sell';
+          this.$refs.scroll.scrollWhere(0, -this.mTop,0);
           break;
       }
+      this.$refs.fakeTab.currentIndex = index;
+      this.$refs.realTab.currentIndex = index;
     },
-    backTopClick(){
-      this.$refs.scroll.scrollWhere(0,0);
+    backTopClick() {
+      this.$refs.scroll.scrollWhere(0, 0);
     },
-    contentScroll(position){
+    contentScroll(position) {
       this.isShowBackTop = -position.y > 1000;
+      this.isShow = -position.y > this.mTop;
     },
-    loadMore(){
+    loadMore() {
       // console.log('hhhh');
       this.getHomeGoods(this.currentType);
       //必须要调用finish方法才能触发下一次pullUp
@@ -122,30 +143,24 @@ export default {
     this.getHomeGoods('pop');
     this.getHomeGoods('new');
     this.getHomeGoods('sell');
+  },
+  updated() {
+    this.$refs.scroll.scroll.refresh();
+  },
+  activated() {
+    this.$refs.scroll.scroll.refresh();
   }
+
 }
 </script>
 
 <style scoped>
-.home-nav{
-  box-shadow: 0 2px 4px #d5465f;
+.home-nav {
   background-color: var(--color-tint);
   color: #fff;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 2;/*防止遮挡*/
 }
-#home{
-  padding-top: 44px;
-}
-.tab-control{
-  position: sticky;
-  top: 44px;
-  z-index: 2;
-}
-.content{
+
+.content {
   height: calc(100vh - 93px);
   overflow: hidden;
 }

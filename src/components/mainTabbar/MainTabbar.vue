@@ -1,5 +1,5 @@
 <template>
-  <TabBar>
+  <TabBar v-if="$route.meta.footShow">
     <TabBarItem path="/home" ActiveColor="blue">
       <!--@写法是路径src别名。详见build/webpack.base.conf.js,在VueCLi3，采用vue.config.js-->
       <img slot="item-icon" src="@/assets/img/tabbar/home.svg">

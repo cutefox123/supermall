@@ -118,6 +118,7 @@ export default {
   mounted() {
     this.scroll = new BScroll(document.querySelector('.wrapper'),{
       probeType: 3,
+      pullUpLoad: true
       // click:true,//使得 content内点击事件有效
     })
   }
