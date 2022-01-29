@@ -16,7 +16,7 @@
     <detail-param-info  ref="goodsParams" :param-info="paramInfo"></detail-param-info>
     <detail-comment-info ref="goodsComment" :comment-info="commentInfo"></detail-comment-info>
   </scroll>
-  <detail-bottom-bar></detail-bottom-bar>
+  <detail-bottom-bar @addCart="addCart"></detail-bottom-bar>
   <!--在我们需要监听一个组件的原生事件时，必须给对应的事件加上.native修饰符-->
   <back-top @click.native="backTopClick" v-show="isShowBackTop"></back-top></div>
 </template>
@@ -81,6 +81,22 @@ export default {
     backTopClick() {
       this.$refs.scroll.scrollWhere(0, 0);
     },
+    //商品加入购物车
+    addCart(){
+      const product = {};
+      product.image = this.topImages[0];
+      product.title = this.goodsInfo.title;
+      product.desc = this.goodsInfo.desc;
+      product.price = this.goodsInfo.newPrice;
+      product.iid = this.iid;
+      product.realPrice = this.goodsInfo.realPrice;
+      product.count = 0;
+      //默认商品在购物车选中
+      product.isSelected = true;
+      this.$store.dispatch('addCart', product).then((res)=>{
+        // this.$toast.show(res, 2000);
+      });
+    }
   },
   data(){
     return{
@@ -91,7 +107,8 @@ export default {
       paramInfo:{},
       commentInfo:{},
       themeTopYs:[],
-      isShowBackTop:false
+      isShowBackTop:false,
+      iid:''
     }
   },
   created() {
