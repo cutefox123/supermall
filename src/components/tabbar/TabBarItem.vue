@@ -19,7 +19,7 @@ export default {
     path:String,
     ActiveColor:{
       type:String,
-      default:'red'
+      default: 'rgba(255,0,0,.7)'
     }
   },
   data(){

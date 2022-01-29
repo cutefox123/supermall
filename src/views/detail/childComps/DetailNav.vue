@@ -2,7 +2,7 @@
   <div>
     <nav-bar>
       <div slot="left" class="back" @click="backClick">
-        <img src="@/assets/img/common/back.svg">
+        <img src="@/assets/img/common/back.svg" alt="">
       </div>
       <div class="title" slot="center">
         <div :class="{active: currentIndex===index}"
@@ -25,13 +25,14 @@ export default {
   data(){
     return{
       iid:null,
-      titles: ['商品','参数','评论','推荐'],
+      titles: ['商品','参数','评论'],
       currentIndex:0
     }
   },
   methods:{
     titleClick(index){
       this.currentIndex = index;
+      this.$emit('titleClick',index);//子组件向父组件传递事件
     },
     backClick(){
       this.$router.back();
