@@ -9,7 +9,7 @@ const Detail = ()=> import('../views/detail/Detail');
 Vue.use(Router)
 
 const router = new Router({
-  mode:'history',//改为history模式
+  // mode:'history',//改为history模式
   routes: [
     {
       path:'',
