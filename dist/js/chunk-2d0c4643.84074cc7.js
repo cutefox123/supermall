@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0c4643"],{"3b42":function(e,n,t){"use strict";t.r(n);var c=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",[t("h2",[e._v("我的")]),t("h2",[e._v("购物车数量"+e._s(e.$store.state.counter))])])},r=[],s={name:"Profile"},o=s,u=t("0c7c"),a=Object(u["a"])(o,c,r,!1,null,"25d92b78",null);n["default"]=a.exports}}]);
-//# sourceMappingURL=chunk-2d0c4643.84074cc7.js.map
