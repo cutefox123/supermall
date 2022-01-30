@@ -12,8 +12,6 @@
 <script>
 import CheckGoodsBtn from '@/components/checkGoodsBtn/CheckGoodsBtn';
 
-import {debounce} from '@/common/utils';
-
 import { mapGetters } from 'vuex';
 
 export default {
@@ -24,10 +22,12 @@ export default {
   computed: {
     ...mapGetters(['cartList', 'cartListLength']),
     isSelectAllGoods(){
-      if(this.cartList.length && this.cartList.every(item=>item.isSelected)){
-        return true;
-      }
-      return false;
+      //every是一假为假，some是一真为真，find是返回第一个符合条件元素
+      /*
+      * 注意： every() 不会对空数组进行检测。
+        注意： every() 不会改变原始数组。
+       注意：若收到一个空数组，此方法在一切情况下都会返回 true*/
+      return !!(this.cartList.length && this.cartList.every(item => item.isSelected));
     },
     totalPrice(){
       return this.cartList.filter(item=>item.isSelected)
@@ -51,11 +51,7 @@ export default {
       }
     },
     handleSettleAccounts(){
-      // 防抖
-      let toast = debounce(()=>{
-        this.$toast.show("去结算");
-      }, 500);
-      toast();
+      this.$toast.show("你的口袋空空。。");
     }
   },
 }

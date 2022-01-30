@@ -93,8 +93,10 @@ export default {
       product.count = 0;
       //默认商品在购物车选中
       product.isSelected = true;
+      //新知识点：mapActions
       this.$store.dispatch('addCart', product).then((res)=>{
-        // this.$toast.show(res, 2000);
+        console.log(res);
+        this.$toast.show(res, 2000);
       });
     }
   },

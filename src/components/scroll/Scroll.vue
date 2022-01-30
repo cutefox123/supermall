@@ -63,5 +63,4 @@ export default {
 
 <!--scoped是限定作用域只在该组件-->
 <style scoped>
-
 </style>

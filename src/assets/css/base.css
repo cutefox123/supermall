@@ -18,6 +18,10 @@
     padding: 0;
     box-sizing: border-box;
 }
+/*解决移动端300ms延迟*/
+html {
+  touch-action: manipulation;
+}
 
 body {
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;

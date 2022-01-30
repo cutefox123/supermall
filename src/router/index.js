@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+//路由懒加载
 const Home = ()=> import('../views/home/Home');
 const Category = ()=> import('../views/category/Category');
 const Cart = ()=> import('../views/cart/Cart');
@@ -9,7 +10,7 @@ const Detail = ()=> import('../views/detail/Detail');
 Vue.use(Router)
 
 const router = new Router({
-  // mode:'history',//改为history模式
+  mode:'history',//改为history模式
   routes: [
     {
       path:'',
